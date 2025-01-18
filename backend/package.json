@@ -1,0 +1,29 @@
+{
+  "name": "shopwave",
+  "version": "1.0.0",
+  "description": "This is an Ecommerce Website",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [
+    "Mern",
+    "Stack",
+    "Ecommerce",
+    "Website"
+  ],
+  "author": "Abdul Wahab Amar",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongoose": "^8.9.5",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "colors": "^1.4.0",
+    "nodemon": "^3.1.9"
+  }
+}
