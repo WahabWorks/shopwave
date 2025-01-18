@@ -14,7 +14,7 @@ try {
     
        return res.status(201).send({success:true,message:"User Registration Successful",newUser});
 
-
+// kdjflksajfdla
 } catch (error) {
  return res.status(400).send({
     success:false , message:"Error in registerController",error})
