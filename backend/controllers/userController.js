@@ -1,5 +1,6 @@
 import { encryptPassword, matchPassword } from "../helper/userHelper.js";
 import userModel from "../models/userModel.js";
+import jwt from 'jsonwebtoken'
 
 
 const registerController = async (req, res) => {
@@ -62,25 +63,29 @@ const loginController = async (req, res) => {
                 .status(401)
                 .send({ success: false, message: "Email not Registered" })
         }
-
-        //Matching Passworduser
+        //Matching Password
         const isMatch = await matchPassword(password, user.password);
         if (!isMatch) {
             return res
                 .status(401)
                 .send({ success: false, message: "Invalid email password" })
         }
+        //Generate Token
+        const token = await  jwt.sign({id: user._id},process.env.JWT_SECRET,{
+            expiresIn: process.env.JWT_EXP
+        })
+
+
         //Remove password field to send user data from backend to frontend
         user.password=undefined;
 
         //Return Successful Response
         return res
+                .cookie("token",token,{httpOnly: true,secure:true})  //"token"is key,token is genrated,{.} means managed by server
                 .status(200)
-                .send({ success: true, message: "Login Successful",user });
+                .send({ success: true, message: "Login Successful",user ,token  });
 
-         
-
-
+        
     } catch (error) {
         console.log(`loginController Error : ${error}`);
         return res

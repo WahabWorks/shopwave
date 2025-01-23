@@ -4,10 +4,12 @@ import connectDB from "./config/db.js";
 import dotenv from "dotenv";
 import morgan from "morgan";
 import cors from "cors";
+import cookieParser from 'cookie-parser';
 
 dotenv.config();
 //MongoDB Connection
 connectDB();
+
 
 const app = express();
 
@@ -15,9 +17,11 @@ const app = express();
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(cors({origin:"http://localhost:5173",credentials:true }));
+app.use(cookieParser());
 
 //Importing Routes
 import userRoutes from "./routes/userRouter.js";
+
 // http://localhost:8080/
 // http://localhost:8080//api/v1/users
 

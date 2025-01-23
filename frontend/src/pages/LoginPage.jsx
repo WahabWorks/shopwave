@@ -27,9 +27,10 @@ export default function LoginPage({ className, ...props }) {
     e.preventDefault();
     console.log(inputValues);
     
-    axios.post("http://localhost:8080/api/v1/users/login",
+    axios.post(`${import.meta.env.VITE_BASE_URL}/users/login`,
       inputValues,
       {
+        withCredentials:true , 
         headers: {
           "Content-Type": "application/json"
         }

@@ -25,7 +25,7 @@ export default function RegisterPage({ className, ...props }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post("http://localhost:8080/api/v1/users/register",
+    axios.post(`${import.meta.env.VITE_BASE_URL}/users/register`,
       inputValues,
       {
         headers: {
