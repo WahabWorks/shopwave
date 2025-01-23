@@ -14,7 +14,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-export default function RegisterPage({ className, ...props }) {
+export default function LoginPage({ className, ...props }) {
   const [inputValues, setInputValues] = useState({});
 
   const handleChange = (e) => {
@@ -25,7 +25,9 @@ export default function RegisterPage({ className, ...props }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post("http://localhost:8080/api/v1/users/register",
+    console.log(inputValues);
+    
+    axios.post("http://localhost:8080/api/v1/users/login",
       inputValues,
       {
         headers: {
@@ -33,7 +35,7 @@ export default function RegisterPage({ className, ...props }) {
         }
       })
       .then((response)=>{
-        // console.log(response);
+        console.log(response);
         toast.success(response?.data?.message,{autoClose:2000});
         setInputValues({});
         
@@ -50,25 +52,16 @@ export default function RegisterPage({ className, ...props }) {
     <div className={cn("h-screen flex justify-center items-center", className)} {...props}>
       <Card className="w-80  ">
         <CardHeader>
-          <CardTitle className="text-2xl">Sign Up</CardTitle>
+          <CardTitle className="text-2xl">Login</CardTitle>
           <CardDescription>
-            Enter your information to create an account
+          Enter your email below to login to your account
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit}>
             <div className="flex flex-col gap-6">
               <div className="grid gap-2">
-                <Label htmlFor="full-name">Full Name</Label>
-                <Input
-                  id="full-name"
-                  type="full-name"
-                  placeholder=" CR7"
-                  required
-                  name="name"
-                  value={inputValues.name || ""}
-                  onChange={handleChange}
-                />
+              
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
@@ -83,6 +76,12 @@ export default function RegisterPage({ className, ...props }) {
               <div className="grid gap-2">
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
+                  <a
+                    href="#"
+                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                  >
+                    Forgot your password?
+                  </a>
                 </div>
                 <Input id="password"
                   placeholder="*******"
@@ -94,14 +93,14 @@ export default function RegisterPage({ className, ...props }) {
                 />
               </div>
               <Button type="submit" className="w-full">
-                Create an account
+                Sign in
               </Button>
             </div>
           </form>
           <div className="mt-4 text-center text-sm">
-            Already have an account?{" "}
-            <Link to="/login" className="underline underline-offset-4">
-              Sign in
+            Don't have an account?{" "}
+            <Link to="/register" className="underline underline-offset-4 ">
+              Sign up
             </Link>
           </div>
         </CardContent>
