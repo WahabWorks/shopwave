@@ -13,9 +13,13 @@ import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { useDispatch } from "react-redux";
+import { login } from '@/store/features/auth/authSlice.js';
+
 
 export default function LoginPage({ className, ...props }) {
   const [inputValues, setInputValues] = useState({});
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     const name = e.target.name;
@@ -25,28 +29,14 @@ export default function LoginPage({ className, ...props }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(inputValues);
+    dispatch(login(inputValues))
+    .unwrap()
+    .then((response)=>{
+      console.log(response);
+    })
+    .catch((error))
+    console.log(error);
     
-    axios.post(`${import.meta.env.VITE_BASE_URL}/users/login`,
-      inputValues,
-      {
-        withCredentials:true , 
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-      .then((response)=>{
-        console.log(response);
-        toast.success(response?.data?.message,{autoClose:2000});
-        setInputValues({});
-        
-      })
-      .catch((error)=>{
-        // console.log(error);
-        toast.error(error.response?.data?.message, {autoClose:2000});
-        setInputValues({});
-      })
-
   }
 
   return (
