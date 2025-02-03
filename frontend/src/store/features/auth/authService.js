@@ -12,6 +12,7 @@ const loginUser = async(inputValues)=>{
           }
         })
         .then((response)=>{
+          window.localStorage.setItem("user", JSON.stringify(response.data));
             return response.data;
         })
         .catch((error)=>{
