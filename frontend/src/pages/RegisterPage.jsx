@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -16,6 +16,8 @@ import { toast } from 'react-toastify';
 
 export default function RegisterPage({ className, ...props }) {
   const [inputValues, setInputValues] = useState({});
+  const navigate = useNavigate();
+
 
   const handleChange = (e) => {
     const name = e.target.name;
@@ -34,14 +36,20 @@ export default function RegisterPage({ className, ...props }) {
       })
       .then((response)=>{
         // console.log(response);
-        toast.success(response?.data?.message,{autoClose:2000});
-        setInputValues({});
+        toast.success(response?.data?.message,{autoClose:1000});
+        setInputValues({})
+        setTimeout(() => {
+          navigate("/login")
+        }, 1000);
         
       })
       .catch((error)=>{
         // console.log(error);
+        console.log(error.message);    
         toast.error(error.response?.data?.message, {autoClose:2000});
-        setInputValues({});
+        setInputValues({})
+
+      
       })
 
   }

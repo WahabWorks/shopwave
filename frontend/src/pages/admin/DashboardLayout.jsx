@@ -1,4 +1,4 @@
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import {
   Bell,
   CircleUser,
@@ -30,8 +30,33 @@ import {
 import { Input } from "@/components/ui/input"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 export default function DashboardLayout() {
+  const navigate = useNavigate();
+  const handleLogout = ()=>{
+    axios
+    .get(`${import.meta.env.VITE_BASE_URL}/users/logout`,
+        {
+          withCredentials:true , 
+          headers: {
+            "Content-Type": "application/json"
+          }
+        })
+        .then((response)=>{
+          window.localStorage.removeItem("user") // to remove data from local storage
+          toast.success(response?.data?.message, {autoClose: 1000})
+          setTimeout(() => {
+            navigate("/login")
+          }, 1000);
+        })
+        .catch((error)=>{
+          window.localStorage.removeItem("user") // to remove data from local storage
+          toast.error(error?.response?.data?.message)          
+        })
+
+  }
+
   return (
     <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
       {/*---------------------------------------------------------------------- Desktop Menu */}
@@ -170,7 +195,7 @@ export default function DashboardLayout() {
               <DropdownMenuItem>Settings</DropdownMenuItem>
               <DropdownMenuItem>Support</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <button className="px-3 py-2" >Logout</button>
+              <button className="px-3 py-2" onClick={handleLogout} >Logout</button>
             </DropdownMenuContent>
           </DropdownMenu>
         </header>

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -11,7 +11,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useDispatch } from "react-redux";
 import { login } from '@/store/features/auth/authSlice.js';
@@ -20,6 +19,8 @@ import { login } from '@/store/features/auth/authSlice.js';
 export default function LoginPage({ className, ...props }) {
   const [inputValues, setInputValues] = useState({});
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
 
   const handleChange = (e) => {
     const name = e.target.name;
@@ -33,14 +34,21 @@ export default function LoginPage({ className, ...props }) {
     .unwrap()
     .then((response)=>{
       if(response?.success == true){
-        toast.success(response?.message, {autoClose:2000})
+        toast.success(response?.message, {autoClose:1000})
+        setTimeout(() => {
+          navigate("/")
+        }, 1000);
       }else{
-        toast.error(response?.message, {autoClose:2000})
+        toast.error(response?.message, {autoClose:1000})
       }
+
     })
-    .catch((error))
-    console.log(error);
-    
+    .catch((error)=>{
+      console.log(error.message);
+      
+    })
+    setInputValues({})
+
   }
 
   return (
@@ -88,7 +96,7 @@ export default function LoginPage({ className, ...props }) {
                 />
               </div>
               <Button type="submit" className="w-full">
-                Sign in
+                Login
               </Button>
             </div>
           </form>
