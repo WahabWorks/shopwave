@@ -20,12 +20,15 @@ app.use(cors({origin:"http://localhost:5173",credentials:true }));
 app.use(cookieParser());
 
 //Importing Routes
-import userRoutes from "./routes/userRouter.js";
+import userRoutes from "./routes/userRoutes.js";
+import categoriesRoutes from "./routes/categoriesRoutes.js";
+
 
 // http://localhost:8080/
 // http://localhost:8080//api/v1/users
 
 app.use("/api/v1/users",userRoutes)
+app.use("/api/v1/categories",categoriesRoutes)
 
 
 const PORT = process.env.PORT || 5000;

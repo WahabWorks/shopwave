@@ -2,8 +2,12 @@ import { Link, Outlet, useNavigate } from "react-router-dom";
 import {
   Bell,
   CircleUser,
+  Component,
+  ComponentIcon,
   Home,
-  Layers,
+
+  LucidePackage2,
+
   Menu,
   Package,
   Package2,
@@ -30,31 +34,61 @@ import {
 import { Input } from "@/components/ui/input"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { toast } from "react-toastify";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { logout } from "@/store/features/auth/authSlice";
 
 export default function DashboardLayout() {
   const navigate = useNavigate();
-  const handleLogout = ()=>{
-    axios
-    .get(`${import.meta.env.VITE_BASE_URL}/users/logout`,
-        {
-          withCredentials:true , 
-          headers: {
-            "Content-Type": "application/json"
-          }
-        })
-        .then((response)=>{
-          window.localStorage.removeItem("user") // to remove data from local storage
-          toast.success(response?.data?.message, {autoClose: 1000})
-          setTimeout(() => {
-            navigate("/login")
-          }, 1000);
-        })
-        .catch((error)=>{
-          window.localStorage.removeItem("user") // to remove data from local storage
-          toast.error(error?.response?.data?.message)          
-        })
+  const [message, setMessage] = useState(null);
+  const user = useSelector((state)=> state.auth.user?.user)
+  const dispatch = useDispatch();
+  
+  useEffect(()=>{
+    if(!user){
+      setMessage("You are not logged in.Redirecting to login page");
+      setTimeout(() => {
+        navigate("/login")
+      }, 3000);
+    } else if(user.role !== 1){
+      setMessage("You are not authorized to access this resource. Redirecting to HomePage ")
+      setTimeout(() => {
+        navigate("/")
+      }, 3000);
+    }
+  },[user,navigate])
 
+  const handleLogout = ()=>{
+   dispatch(logout())
+       .unwrap()
+       .then((response)=>{
+         if(response?.success == true){
+           toast.success(response?.message, {autoClose:1000})
+           setTimeout(() => {
+             navigate("/")
+           }, 1000);
+         }else{
+           toast.error(response?.message, {autoClose:1000})
+         }
+   
+       })
+       .catch((error)=>{
+         toast.error(error, {autoClose:1000})
+         
+       })
+       
+
+  }
+
+  if(message) {
+    return(
+      <div className="h-screen flex justify-center items-center">
+        <div className="text-center">
+          <p className="text-3xl ">{message}</p>
+        </div>
+
+      </div>
+    )
   }
 
   return (
@@ -98,6 +132,14 @@ export default function DashboardLayout() {
                 <Package className="h-4 w-4" />
                 Products{" "}
               </Link>
+              <Link
+                to="/admin/categories"
+                className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
+              >
+                <Component className="h-4 w-4" />
+                Categories
+              </Link>
+              
               <Link
                 to="/admin/users"
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:text-primary"
@@ -156,6 +198,13 @@ export default function DashboardLayout() {
                 >
                   <Package className="h-5 w-5" />
                   Products
+                </Link>
+                <Link
+                  to="/admin/categories"
+                  className="mx-[-0.65rem] flex items-center gap-4 rounded-xl px-3 py-2 text-muted-foreground hover:text-foreground"
+                >
+                  <ComponentIcon className="h-5 w-5" />
+                  Categories
                 </Link>
 
                 <Link

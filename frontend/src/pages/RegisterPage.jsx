@@ -11,12 +11,16 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
-import axios from 'axios';
 import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
+import { register } from '@/store/features/auth/authSlice';
+
 
 export default function RegisterPage({ className, ...props }) {
   const [inputValues, setInputValues] = useState({});
+  const {status} = useSelector((state)=>state.auth)
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
 
   const handleChange = (e) => {
@@ -27,30 +31,24 @@ export default function RegisterPage({ className, ...props }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post(`${import.meta.env.VITE_BASE_URL}/users/register`,
-      inputValues,
-      {
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-      .then((response)=>{
-        // console.log(response);
-        toast.success(response?.data?.message,{autoClose:1000});
+    dispatch(register(inputValues))
+        .unwrap()
+        .then((response)=>{
+          if(response?.success == true){
+            toast.success(response?.message, {autoClose:1000})
+            setTimeout(() => {
+              navigate("/")
+            }, 1000);
+          }else{
+            toast.error(response?.message, {autoClose:1000})
+          }
+    
+        })
+        .catch((error)=>{
+          toast.error(error, {autoClose:1000})
+          
+        })
         setInputValues({})
-        setTimeout(() => {
-          navigate("/login")
-        }, 1000);
-        
-      })
-      .catch((error)=>{
-        // console.log(error);
-        console.log(error.message);    
-        toast.error(error.response?.data?.message, {autoClose:2000});
-        setInputValues({})
-
-      
-      })
 
   }
 
@@ -101,8 +99,8 @@ export default function RegisterPage({ className, ...props }) {
                   onChange={handleChange}
                 />
               </div>
-              <Button type="submit" className="w-full">
-                Create an account
+              <Button type="submit" className="w-full" disabled={status == "loading" ? true :false}>
+              {status == "loading" ? "Creating Account...":"Create Account"}
               </Button>
             </div>
           </form>

@@ -13,8 +13,8 @@ const registerController = async (req, res) => {
     }
 
     //Checking user  email already exist or not
-    const userExist = await userModel.findOne({ email });
-    if (userExist) {
+    const isExist = await userModel.findOne({ email }); 
+    if (isExist) {
       return res
         .status(400)
         .send({ success: false, message: "Email Already Exist" });

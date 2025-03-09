@@ -22,12 +22,13 @@ const isAuthorized = async (req, res, next) => {
     });
   }
 };
+
 const isAdmin = async (req, res, next) => {
   try {
     const user = req.user;
-
+   
     if (!user || user.role !== 1){
-      return res.status(401).json({
+      return res.status(401).send({
         success: false,
         message: "You are not authorized to access this resourse",
       });

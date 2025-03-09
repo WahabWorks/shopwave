@@ -23,8 +23,8 @@ function Users() {
         })
   }
   useEffect(()=>{
-    getAllUsers();
-  })
+    getAllUsers()
+  },[])
 
   return (
     <>

@@ -12,12 +12,15 @@ import { Label } from "@/components/ui/label";
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { login } from '@/store/features/auth/authSlice.js';
 
 
 export default function LoginPage({ className, ...props }) {
   const [inputValues, setInputValues] = useState({});
+  // const status = useSelector((state)=>state.auth.status)
+  const {status} = useSelector((state)=>state.auth)
+  
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -44,7 +47,7 @@ export default function LoginPage({ className, ...props }) {
 
     })
     .catch((error)=>{
-      console.log(error.message);
+      toast.error(error, {autoClose:1000})
       
     })
     setInputValues({})
@@ -95,14 +98,14 @@ export default function LoginPage({ className, ...props }) {
                   onChange={handleChange}
                 />
               </div>
-              <Button type="submit" className="w-full">
-                Login
+              <Button type="submit" className="w-full" disabled={status == "loading" ? true :false  }>
+                {status == "loading" ? "Signing in...":"Sign in"}
               </Button>
             </div>
           </form>
           <div className="mt-4 text-center text-sm">
             Don't have an account?{" "}
-            <Link to="/register" className="underline underline-offset-4 ">
+            <Link to="/register" className="underline underline-offset-4 " disabled>
               Sign up
             </Link>
           </div>
