@@ -22,13 +22,12 @@ app.use(cookieParser());
 //Importing Routes
 import userRoutes from "./routes/userRoutes.js";
 import categoriesRoutes from "./routes/categoriesRoutes.js";
+import productsRoutes from "./routes/productsRoutes.js";
 
-
-// http://localhost:8080/
-// http://localhost:8080//api/v1/users
 
 app.use("/api/v1/users",userRoutes)
 app.use("/api/v1/categories",categoriesRoutes)
+app.use("/api/v1/products",productsRoutes)
 
 
 const PORT = process.env.PORT || 5000;
