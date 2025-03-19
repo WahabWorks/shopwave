@@ -13,7 +13,7 @@ import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
-import { register } from '@/store/features/auth/authSlice';
+import { register } from '@/store/features/auth/authSlice.js';
 
 
 export default function RegisterPage({ className, ...props }) {
@@ -41,15 +41,11 @@ export default function RegisterPage({ className, ...props }) {
             }, 1000);
           }else{
             toast.error(response?.message, {autoClose:1000})
-          }
-    
+          }    
         })
         .catch((error)=>{
-          toast.error(error, {autoClose:1000})
-          
+          toast.error(error, {autoClose:1000})     
         })
-        setInputValues({})
-
   }
 
   return (

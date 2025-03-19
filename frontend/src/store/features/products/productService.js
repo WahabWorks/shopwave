@@ -1,0 +1,30 @@
+import axios from "axios";
+
+//Use this function in productsSlice.js => createAsyncThunk
+//Register
+const createProduct = async (inputValues) => {
+    try {
+      const axiosResponse = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/products`,
+        inputValues,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      return axiosResponse.data;
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message ||
+        error.message ||
+        "Something went wrong! Please try again";
+      return Promise.reject(errorMessage);
+    }
+  };
+
+
+const productService = { createProduct };
+
+export default productService;
