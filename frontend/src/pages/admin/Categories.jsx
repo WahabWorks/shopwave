@@ -30,11 +30,11 @@ import { toast } from "react-toastify";
 
 function Categories() {
   const [inputValues, setInputValues] = useState({});
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
   const categories = useSelector((state) => state.categories.categories);
   const status = useSelector((state) => state.categories.status);
   const error = useSelector((state) => state.categories.error);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const name = e.target.name;

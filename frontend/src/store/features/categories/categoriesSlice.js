@@ -14,7 +14,7 @@ export const AddCategory = createAsyncThunk(
   }
 );
 
-//Use this function in categories page
+//Use this function to get all categories 
 export const getAllCategory = createAsyncThunk(
   "categories/getAllCategory",
   async ( thunkAPI) => {

@@ -23,8 +23,28 @@ const createProduct = async (inputValues) => {
       return Promise.reject(errorMessage);
     }
   };
+// Getting all Products
+const getAllProd = async () => {
+  try {
+    const axiosResponse = await axios.get(
+      `${import.meta.env.VITE_BASE_URL}/products`,      
+      {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return axiosResponse.data;
+  } catch (error) {
+    const errorMessage =
+      error.response?.data?.message ||
+      error.message ||
+      "Something went wrong! Please try again";
+    return Promise.reject(errorMessage);
+  }
+};
 
-
-const productService = { createProduct };
+const productService = { createProduct,getAllProd };
 
 export default productService;
