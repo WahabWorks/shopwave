@@ -44,7 +44,29 @@ const getAllProd = async () => {
     return Promise.reject(errorMessage);
   }
 };
+//Delete product Code
+const deleteProd = async (productId) => {
+  try {
+    const axiosResponse = await axios.delete(
+      `${import.meta.env.VITE_BASE_URL}/products/${productId }`,
+      
+      {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return axiosResponse.data;
+  } catch (error) {
+    const errorMessage =
+      error.response?.data?.message ||
+      error.message ||
+      "Something went wrong! Please try again";
+    return Promise.reject(errorMessage);
+  }
+};
 
-const productService = { createProduct,getAllProd };
+const productService = { createProduct,getAllProd,deleteProd };
 
 export default productService;

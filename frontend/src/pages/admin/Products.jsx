@@ -18,14 +18,33 @@ import { Link } from "react-router-dom";
 import { MoreHorizontal } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import { getAllProducts } from "@/store/features/products/productSlice";
+import { deleteProduct, getAllProducts } from "@/store/features/products/productSlice";
 import moment from "moment";
+import { toast } from "react-toastify";
  function Products() {
   const products = useSelector((state) => state.products.products);
   const status = useSelector((state) => state.products.status);
   const error = useSelector((state) => state.products.error);
   const dispatch = useDispatch();
   // const navigate = useNavigate();
+
+    const handleDelete = (productId) => {
+      dispatch(deleteProduct(productId))
+        .unwrap()
+        .then((response) => {
+          if (response?.success == true) {
+            toast.success(response?.message, { autoClose: 1000 });
+            dispatch(getAllProducts());
+          } else {
+            toast.error(response?.message, { autoClose: 1000 });
+          }
+        })
+        .catch((error) => {
+          toast.error(error, { autoClose: 1000 });
+        });
+      
+  
+    }
 
   useEffect(() => {
     dispatch(getAllProducts()); //get all product function
@@ -138,9 +157,9 @@ import moment from "moment";
                          </DropdownMenuItem>
                          <DropdownMenuItem>
                            <button
-                             // onClick={() => {
-                             //   handleDelete(category.slug);
-                             // }}
+                             onClick={() => {
+                               handleDelete(product._id);
+                             }}
                            >
                              Delete
                            </button>

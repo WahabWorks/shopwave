@@ -50,7 +50,7 @@ export const UpdatingCategory = createAsyncThunk(
     }
   }
 );
-//Use this function in categories page
+//Use this function  to delete Category
 export const DeleteCategory = createAsyncThunk(
   "categories/DeleteCategory",
   async (slug, thunkAPI) => {

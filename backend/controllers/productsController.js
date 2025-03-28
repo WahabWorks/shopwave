@@ -1,5 +1,5 @@
 import productsModel from "../models/productsModel.js";
-import { uploadImageOnCloudinary } from "../helper/cloudinaryHelper.js";
+import { deleteImageOnCloudinary, uploadImageOnCloudinary } from "../helper/cloudinaryHelper.js";
 
 const addProductsController = async (req, res) => {
   const { title, description, category, price } = req.body;
@@ -61,12 +61,12 @@ const addProductsController = async (req, res) => {
     });
   }
 };
-
 const getAllProductController = async (req, res) => {
-
   try {
-  
-    const products = await productsModel.find({}).populate("user","name").populate("category","name");
+    const products = await productsModel
+      .find({})
+      .populate("user", "name")
+      .populate("category", "name");
 
     res.status(200).send({
       success: true,
@@ -79,10 +79,43 @@ const getAllProductController = async (req, res) => {
     res.status(401).send({
       success: false,
       message: `Error in getAllProductController: ${error}`,
-      error
+      error,
+    });
+  }
+};
+const deleteProductsController = async (req, res) => {
+  try {
+    const { productId } = req.params;
+    const product = await productsModel.findById(productId);
+    if (!product) {
+      return res
+        .status(400)
+        .send({ success: false, message: "Product not Found" });
+    }
+
+    //delete product image from cloudinary
+    if (product.picture && product.picture.public_id) {
+      await deleteImageOnCloudinary(product.picture.public_id);
+    }
+
+    await productsModel .findByIdAndDelete(productId);
+
+    res.status(200).send({
+      success: true,
+      message: "Product Deleted successfully",
+    });
+  } catch (error) {
+    console.log(`Error in deleteProductsController ${error}`);
+    res.status(401).send({
+      success: false,
+      message: `Error in deleteProductsController: ${error}`,
+      error,
     });
   }
 };
 
-
-export { addProductsController,getAllProductController };
+export {
+  addProductsController,
+  getAllProductController,
+  deleteProductsController,
+};

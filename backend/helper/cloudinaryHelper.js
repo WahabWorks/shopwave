@@ -9,8 +9,6 @@ import fs from "fs";
 });
 
 // ----------------------------------------------------------------------for uploading image on cloudinary
-
-
 const uploadImageOnCloudinary=async(filepath,foldername)=>{
     // for uploading image on cloudinary
     try {
@@ -36,5 +34,18 @@ const uploadImageOnCloudinary=async(filepath,foldername)=>{
         
     }
 }
+// ----------------------------------------------------------------------for deleting image on cloudinary
 
-export{uploadImageOnCloudinary}
+const deleteImageOnCloudinary=async(public_id)=>{
+   
+    try {
+        const result =await cloudinary.uploader.destroy(public_id);
+        return result;
+        
+    } catch (error) {
+        throw new error(error);
+        // throw new Error(error.message || 'Cloudinary upload failed');
+        
+    }
+}
+export{uploadImageOnCloudinary,deleteImageOnCloudinary}
